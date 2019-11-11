@@ -1,0 +1,15 @@
+.jumbotron {
+  text-align: center;
+  color: aliceblue;
+  background-color: #7f462c;
+}
+
+.card {
+  border-color: #337ab7;
+}
+.card-header{
+  background-color: #337ab7;
+  
+  color: aliceblue;
+}
+  
