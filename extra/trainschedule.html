@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col">
                 <div class="jumbotron">
-                    <h1 class="display-4">Train Schedule</h1>
+                    <h1 class="display-4">Train Schedule    <span id="current-time"></span></h1>
 
                 </div>
             </div>
@@ -99,28 +99,54 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js'></script>
 
 
     <script>
+        
+        // var currentTime = setInterval(function(){
+        //     $('#current-time').html(moment().format('HH:mm'))
+        // }, 1000);
+        
+
+
         $('#add-train').on('click', function(event) {
             event.preventDefault();
             name = $('#trainName').val().trim();
             destination = $('#trainDestination').val().trim();
             firstTrain = $('#trainTime').val().trim();
             frequency = $('#trainFrequency').val().trim();
-
-
             
-            console.log(name)
-            console.log(destination)
-            console.log(frequency)
-            console.log(firstTrain)
 
-            firstTrain = moment(firstTrain).unix();
-            // frequency = moment()
-            secondTrain = firstTrain + frequency
-            console.log(firstTrain);
+            var trainObj = {
+                name: name,
+                destination: destination,
+                firstTrain: firstTrain,
+                frequency: frequency
+            }
+
+            console.log(trainObj);
+
+            var initalTrain = moment(firstTrain, 'hh:mm');
+            var initalTrainTime = initalTrain.format('hh:mm')
+            var presentTime = moment().format('hh:mm')
+
+            console.log(`Initial: ${initalTrain}`);
+            console.log(`Inital Time: ${initalTrainTime}`)
+            console.log(`Now: ${presentTime}`)
+
+            if (presentTime > initalTrainTime) {
+                var nextArrival = initalTrain.format('hh:mm')
+                var minutesAway = moment(initalTrain).fromNow();
+                console.log(`Next: ${nextArrival}`);
+                console.log(`minAway: ${minutesAway}`)
+
+            } else {
+                
+            }
+            
+
+
 
 
             $('#newTrain').append(
