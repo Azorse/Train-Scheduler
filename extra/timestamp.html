@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/49884dd92c.js" crossorigin="anonymous"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-database.js"></script>
+
+    <style>
+        .jumbotron {
+            color: white;
+            background-color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        #Add-Employee{
+            width:90%;
+            margin: 0 auto; /* Added */
+            float: none; /* Added */
+        }
+
+     
+    </style>
+</head> 
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="jumbotron">
+                    <h1 class="display-4">Employee Data Management</h1>
+                    <h3>A Comprehenseive Directory of Employee Billable Hours</h3>
+                </div>
+            </div>
+        </div>      
+        <div class="card" id="Current-Employees">
+            <div class="card-header">Current Employees</div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Employee Name</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col">Months Worked</th>
+                                <th scope="col">Monthly Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">John Smith</th>
+                                <td>Hourly</td>
+                                <td>01/01/2019</td>
+                                <td>11</td>
+                                <td>110</td>                    
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row mx-auto">     
+            <div class="col-10">     
+                <div class="card" id="Add-Employee">
+                    <div class="card-header">Add Employee</div>
+                        <div class="card-body">          
+                            <form>
+                                <div class="form-group">
+                                    <label for="employeeName">Employee Name:</label>
+                                    <input type="text" class="form-control" id="input-name" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="employeeRole">Role:</label>
+                                    <input type="text" class="form-control" id="input-role" placeholder="">                  
+                                </div>
+                                <div class="form-group">
+                                    <label for="startDate">Start Date (MM/DD/YYYY)</label>
+                                    <input type="text" class="form-control" id="input-date" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="monthlyRate">Monthly Rate</label>
+                                    <input type="text" class="form-control" id="input-rate" placeholder="">
+                                </div>
+                                <button type="submit" id="addEmployee" class="btn btn-primary float-right">Submit</button>     
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            var firebaseConfig = {
+                apiKey: "AIzaSyBR4ER8Nlitz47jp6_48U3gkF6t-JrUkgE",
+                authDomain: "timestampproject.firebaseapp.com",
+                databaseURL: "https://timestampproject.firebaseio.com",
+                projectId: "timestampproject",
+                storageBucket: "timestampproject.appspot.com",
+                messagingSenderId: "197124462889",
+                appId: "1:197124462889:web:59a8a9602c970545313f38"
+            };
+            
+            firebase.initializeApp(firebaseConfig);
+
+            var database = firebase.database();
+
+            $('#addEmployee').on('click', function(event) {
+                event.preventDefault();
+                employeeName = $('#input-name').val().trim();
+                role = $('#input-role').val().trim();
+                startYear = $('#input-date').val().trim();
+                monthlyRate = $('#input-rate').val().trim();
+
+                database.ref().push({
+                    name: employeeName,
+                    role: role,
+                    startDate: startYear//store as unix, large x
+                    monthlyRate: monthlyRate
+                })
+
+                // var startingDate = childSnapshot.val().startDate 
+
+                database.ref().on('child_added', function(childSnapshot){
+                    var startingDate = childSnapshot.val().startDate;
+
+                    console.log(childSnapshot.val().name)
+                    console.log(childSnapshot.val().role)
+                    console.log(childSnapshot.val().startDate)
+                    console.log(childSnapshot.val().monthlyRate)
+                    //console.log(startingDate.diff(moment(), "months"));
+
+                    $('tbody').append(`
+                    <tr>
+                        <th scope="row">${childSnapshot.val().name}</th>
+                        <td>${childSnapshot.val().role}</td>
+                        <td>${childSnapshot.val().startDate}</td>
+                        <td>${startingDate.diff(moment(), 'months')}</td>
+                        <td>${childSnapshot.val().monthlyRate}</td>
+                    </tr>`)
+
+                }, function(errorObject){
+                    console.log("Child added failed: " + errorObject.code);
+                });
+
+
+            });
+
+
+
+        })
+    </script>
+    
+    
+</body>
+</html>

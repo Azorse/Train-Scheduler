@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/49884dd92c.js" crossorigin="anonymous"></script>
+
+    <style>
+        .jumbotron {
+            text-align: center;
+            color: aliceblue;
+            background-color: #337ab7;
+        }
+
+        .card {
+            border-color: #337ab7;
+        }
+
+        .card-header {
+            background-color: #337ab7;
+            color: aliceblue;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="jumbotron">
+                    <h1 class="display-4">Train Schedule</h1>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-header">Current Trains</div>
+            <div class="card-body">
+                <table class="table">
+                    <thread>
+                        <tr>
+                            <th scope="col">Train Name</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Frequency</th>
+                            <th scope="col">Next Arrival</th>
+                            <th scope="col">Minutes Away</th>
+
+                        </tr>
+                    </thread>
+                    <tbody id="newTrain">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="card">
+            <div class="card-header">Add Train</div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Train Name:</label>
+                        <input type="text" class="form-control" id="trainName" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" class="form-control" id="trainDestination" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="first-train">Time of First Train (HH:mm - 24 hour clock)</label>
+                        <input type="text" class="form-control" id="trainTime" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="frequency">Frequency (min)</label>
+                        <input type="text" class="form-control" id="trainFrequency" placeholder="">
+                    </div>
+                    <button type="submit" id="add-train" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+
+    <script>
+        $('#add-train').on('click', function(event) {
+            event.preventDefault();
+            name = $('#trainName').val().trim();
+            destination = $('#trainDestination').val().trim();
+            firstTrain = $('#trainTime').val().trim();
+            frequency = $('#trainFrequency').val().trim();
+
+
+            
+            console.log(name)
+            console.log(destination)
+            console.log(frequency)
+            console.log(firstTrain)
+
+            firstTrain = moment(firstTrain).unix();
+            // frequency = moment()
+            secondTrain = firstTrain + frequency
+            console.log(firstTrain);
+
+
+            $('#newTrain').append(
+                `<tr>
+                    <td>${name}</td>
+                    <td>${destination}</td>
+                    <td>${frequency}</td>
+                    <td>??</td>
+                    <td>??</td>
+                
+                </tr>`
+            )
+
+        });
+        
+    </script>
+</body>
+
+</html>
