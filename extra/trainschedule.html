@@ -124,28 +124,46 @@
                 firstTrain: firstTrain,
                 frequency: frequency
             }
+            var initalTrain
+            var initalTrainTime
+            var presentTime
+            var nextArrival
+            var minutesAway
 
             console.log(trainObj);
 
-            var initalTrain = moment(firstTrain, 'hh:mm');
-            var initalTrainTime = initalTrain.format('hh:mm')
-            var presentTime = moment().format('hh:mm')
+            initalTrain = moment(firstTrain, 'hh:mm');
+            initalTrainTime = initalTrain.format('hh:mm')
+            presentTime = moment().format('hh:mm')
 
             console.log(`Initial: ${initalTrain}`);
             console.log(`Inital Time: ${initalTrainTime}`)
             console.log(`Now: ${presentTime}`)
 
-            if (presentTime > initalTrainTime) {
-                var nextArrival = initalTrain.format('hh:mm')
-                var minutesAway = moment(initalTrain).fromNow();
+            if (presentTime < initalTrainTime) {
+                nextArrival = initalTrain.format('hh:mm')
+                minutesAway = moment(initalTrain).fromNow();
                 console.log(`Next: ${nextArrival}`);
                 console.log(`minAway: ${minutesAway}`)
 
             } else {
-                var timePassed
-                console.log(timePassed)
-                // var nextArrival
-                // var minutesAway
+                var a = moment(presentTime, 'hh:mm')
+                var b = moment(initalTrainTime, 'hh:mm')
+
+                var timePassed = a.diff(b, 'minutes')
+                //var timePassed = moment(presentTime, 'hh:mm').diff((initalTrain, 'hh:mm'), 'minutes') above works but this doesn't? returns NaN
+                var missedTrains = Math.round(timePassed / frequency);
+
+                nextArrival = moment(b)//.add((frequency, 'minutes') * missedTrains);
+                var minutesPast = timePassed % frequency;
+                minutesAway = frequency - minutesPast
+                
+                console.log(`Time passed since first train: ${timePassed}`)
+                console.log(`How many trains were missed: ${missedTrains}`)
+                console.log(`How often, in mins does the train come: ${frequency}`)
+                console.log(`Next Arrival: ${nextArrival}`)
+                console.log(`Minutes away: ${minutesAway}`)
+
             }
             
 
