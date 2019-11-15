@@ -115,9 +115,8 @@
             name = $('#trainName').val().trim();
             destination = $('#trainDestination').val().trim();
             firstTrain = $('#trainTime').val().trim();
-            frequency = $('#trainFrequency').val().trim();
+            frequency = parseInt($('#trainFrequency').val().trim());
             
-
             var trainObj = {
                 name: name,
                 destination: destination,
@@ -132,31 +131,38 @@
 
             console.log(trainObj);
 
-            initalTrain = moment(firstTrain, 'hh:mm');
-            initalTrainTime = initalTrain.format('hh:mm')
-            presentTime = moment().format('hh:mm')
+            initalTrain = moment(firstTrain, 'HH:mm');
+            presentTime = moment();
+            
 
             console.log(`Initial: ${initalTrain}`);
-            console.log(`Inital Time: ${initalTrainTime}`)
-            console.log(`Now: ${presentTime}`)
+            console.log(`Now: ${presentTime}`);
 
-            if (presentTime < initalTrainTime) {
-                nextArrival = initalTrain.format('hh:mm')
-                minutesAway = moment(initalTrain).fromNow();
+
+            //time of first train + ((number of missed trains + 1) * frequency of trains)
+
+
+
+            if (presentTime < initalTrain) {
+                nextArrival = initalTrain.format('HH:mm')
+                minutesAway = moment(initalTrain).fromNow('m');
+
                 console.log(`Next: ${nextArrival}`);
                 console.log(`minAway: ${minutesAway}`)
 
             } else {
-                var a = moment(presentTime, 'hh:mm')
-                var b = moment(initalTrainTime, 'hh:mm')
+                var a = moment(presentTime, 'HH:mm')
+                var b = moment(initalTrain, 'HH:mm')
 
                 var timePassed = a.diff(b, 'minutes')
-                //var timePassed = moment(presentTime, 'hh:mm').diff((initalTrain, 'hh:mm'), 'minutes') above works but this doesn't? returns NaN
+                //var timePassed = moment(presentTime, 'HH:mm').diff((initalTrain, 'HH:mm'), 'minutes') above works but this doesn't? returns NaN
                 var missedTrains = Math.round(timePassed / frequency);
+                // var timeToAdd = (missedTrains + 1) 
+                // var timeNeededToAdd = missedTrains  
 
-                nextArrival = moment(b)//.add((frequency, 'minutes') * missedTrains);
+                nextArrival = moment(b).add(((missedTrains + 1) * frequency), 'minutes');
                 var minutesPast = timePassed % frequency;
-                minutesAway = frequency - minutesPast
+                minutesAway = frequency - minutesPast;
                 
                 console.log(`Time passed since first train: ${timePassed}`)
                 console.log(`How many trains were missed: ${missedTrains}`)
@@ -165,18 +171,14 @@
                 console.log(`Minutes away: ${minutesAway}`)
 
             }
-            
-
-
-
 
             $('#newTrain').append(
                 `<tr>
                     <td>${name}</td>
                     <td>${destination}</td>
                     <td>${frequency}</td>
-                    <td>??</td>
-                    <td>??</td>
+                    <td>${nextArrival}</td>
+                    <td>${minutesAway}</td>
                 
                 </tr>`
             )
